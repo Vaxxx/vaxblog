@@ -9,10 +9,10 @@ async function getUsers(): Promise<User[]> {
     return data.users
 }
 
+
 export default async function Page() {
-    const data = await getUsers()
-console.log("data")
-console.log(data)
+
+    const data = await getUsers();
     return (
         <section className='py-24'>
             <div className='container'>

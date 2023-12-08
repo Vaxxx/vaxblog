@@ -9,6 +9,7 @@ import GoogleProvider from "next-auth/providers/google";
 declare module "next-auth" {
     interface Session {
         user: User & {
+            id: string;
             role: string;
         }
     }
@@ -16,6 +17,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
     interface JWT{
+        id: string;
         role: string;
     }
 }
@@ -72,6 +74,7 @@ export const authOptions:NextAuthOptions = {
         async session({session, token}){
             if(token){
                 session.user.role = token.role;
+                session.user.id = token.id;
             }
             return session;
         },

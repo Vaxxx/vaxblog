@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {toast} from "react-toastify";
+import {PostSchemaType} from "@/lib/validation/post-validation";
 
 const CategoryFormSchema = z.object({
     id: z.string(),
@@ -121,60 +122,72 @@ export async function DeleteCategory(id: string){
      }
     }
 }
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////GET ALL CATEGORY//////////////////////////////////////////////////////
+//get all categories
+export async function getAllCategories(){
+    const response = await fetch(`http://localhost:3000/api/category`, {
+        cache: "no-store"
+    });
+    const data =  await response.json();
+    return data.categories;
 
-
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// POSTS/////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////Create Post/////////////////////////////////////////////////////////////
-const MAX_FILE_SIZE = 2000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+// const MAX_FILE_SIZE = 2000000;
+// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const PostFormSchema = z.object({
     id: z.string(),
-    userId: z.string({
-        invalid_type_error: 'Please select a user'
-    }),
+    userId: z.string(),
     title: z.string().min(1, {message: "Title is required"}),
     content: z.string().min(3, "The description must be up to three characters"),
+    selected: z.string(),
     // image: z.any()
     //     .refine((files) => files?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)
     //     .refine(
     //         (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
     //         "Only .jpg, .jpeg, .png and .webp formats are supported."),
-    image: z.any()
+     image: z.string()
 });
 
 const CreatePostType = PostFormSchema.omit({id:true, createdAt: true, updatedAt:true});
 const UpdatePostType = PostFormSchema.omit({id:true, createdAt: true, updatedAt:true});
 
 ////////////////////////////////////Create Post////////////////
-export async function CreatePost(formData: FormData){
-    const validatedFields = CreatePostType.safeParse({
-        userId: formData.get('userId'),
-        title: formData.get('title'),
-        content: formData.get('content'),
-        image: formData.get('image')
-    });
-
-    if(!validatedFields.success){
-        console.log(validatedFields.error.flatten().fieldErrors)
-        return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to create Post'
-        }
-    }
-
-    const {userId, title, content, image} = validatedFields.data
-
-    console.log("title: ")
-    console.log(title);
-    console.log("Content: ")
-    console.log(content);
-    console.log("User ID: ")
-    console.log(userId)
-    console.log("Image: ")
-    console.log(image)
+// export async function CreatePost(formData: FormData){
+export async function CreatePost(data: PostSchemaType){
+    console.log("Form Data:")
+    console.log(data);
+    // const validatedFields = CreatePostType.safeParse({
+    //  //   userId: formData.get('userId'),
+    //     title: formData.get('title'),
+    //     content: formData.get('content'),
+    //  //   image: formData.get('image')
+    // });
+    //
+    // if(!validatedFields.success){
+    //     console.log(validatedFields.error.flatten().fieldErrors)
+    //     return {
+    //         errors: validatedFields.error.flatten().fieldErrors,
+    //         message: 'Missing Fields. Failed to create Post'
+    //     }
+    // }
+    //
+    // // const {userId, title, content, image} = validatedFields.data
+    // const {title, content} = validatedFields.data
+    //
+    // console.log("title: ")
+    // console.log(title);
+    // console.log("Content: ")
+    // console.log(content);
+    // console.log("User ID: ")
+    // console.log(userId)
+    // console.log("Image: ")
+    // console.log(image)
     // try{
     //     await prisma.post.create({
     //         data: {
@@ -187,57 +200,4 @@ export async function CreatePost(formData: FormData){
     //  }
     //  revalidatePath("/user/posts")
     //  redirect("/user/posts")
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////Update post////////////////////////////////////////////////////
-
-export async function UpdatePost(id: string, formData: FormData){
-    const validatedFields = UpdatePostType.safeParse({
-        userId: formData.get('userId'),
-        title: formData.get('title'),
-        content: formData.get('content'),
-        image: formData.get('image')
-    });
-
-    if(!validatedFields.success){
-        console.log(validatedFields.error.flatten().fieldErrors)
-        return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to create Post'
-        }
-    }
-
-    //get validated data for the post
-    const {userId, title, content, image} = validatedFields.data;
-    //update post
-    try{
-       await prisma.post.update({
-           where:{id},
-           data: {
-               userId, title, content, image
-           }
-       });
-        toast.success("Update Was Successful!")
-     }catch(error: any){
-         console.log("Update post(Action.ts)ERROR: " + error);
-     }
-    revalidatePath("/user/posts")
-    redirect("/user/posts")
-}
-
-////////////////////////////////////////////Delete Post////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-export async function DeletePost(id: string){
-    const confirmed = window.confirm("Are you sure you want to delete this category?")
-    try{
-        if(confirmed) {
-            await prisma.post.delete({where: {id}});
-            revalidatePath("/user/posts")
-            toast.success("Post deleted successfully!")
-        }
-     }catch(error: any){
-         console.log("ERROR: " + error);
-     }
 }
