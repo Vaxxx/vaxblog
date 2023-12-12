@@ -5,6 +5,7 @@ import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {toast} from "react-toastify";
 import {PostSchemaType} from "@/lib/validation/post-validation";
+import {Category} from "@/lib/types";
 
 const CategoryFormSchema = z.object({
     id: z.string(),
@@ -112,7 +113,6 @@ export async function DeleteCategory(id: string){
 
     if(confirmed){
         try{
-
            await prisma.category.delete({where: {id}});
            revalidatePath("/user/category")
            toast.success("Category deleted successfully!");
@@ -138,66 +138,52 @@ export async function getAllCategories(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////Create Post/////////////////////////////////////////////////////////////
-// const MAX_FILE_SIZE = 2000000;
-// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const PostFormSchema = z.object({
-    id: z.string(),
-    userId: z.string(),
-    title: z.string().min(1, {message: "Title is required"}),
-    content: z.string().min(3, "The description must be up to three characters"),
-    selected: z.string(),
-    // image: z.any()
-    //     .refine((files) => files?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)
-    //     .refine(
-    //         (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
-    //         "Only .jpg, .jpeg, .png and .webp formats are supported."),
-     image: z.string()
-});
 
-const CreatePostType = PostFormSchema.omit({id:true, createdAt: true, updatedAt:true});
-const UpdatePostType = PostFormSchema.omit({id:true, createdAt: true, updatedAt:true});
+function getFields(input:any, field:any){
+    let output = [] ;
+    for(let i = 0; i < input.length; ++i)
+        output.push(input[i][field]);
+    return output;
+}
 
-////////////////////////////////////Create Post////////////////
-// export async function CreatePost(formData: FormData){
 export async function CreatePost(data: PostSchemaType){
-    console.log("Form Data:")
-    console.log(data);
-    // const validatedFields = CreatePostType.safeParse({
-    //  //   userId: formData.get('userId'),
-    //     title: formData.get('title'),
-    //     content: formData.get('content'),
-    //  //   image: formData.get('image')
-    // });
+    // console.log("Form Data:")
+   console.log(data)
+    console.log("Found data: ")
+
+    //  console.log("label: ")
+      let cate = getFields(data.selected, "label");
+    // console.log(cate)
     //
-    // if(!validatedFields.success){
-    //     console.log(validatedFields.error.flatten().fieldErrors)
-    //     return {
-    //         errors: validatedFields.error.flatten().fieldErrors,
-    //         message: 'Missing Fields. Failed to create Post'
-    //     }
-    // }
-    //
-    // // const {userId, title, content, image} = validatedFields.data
-    // const {title, content} = validatedFields.data
-    //
-    // console.log("title: ")
-    // console.log(title);
-    // console.log("Content: ")
-    // console.log(content);
-    // console.log("User ID: ")
-    // console.log(userId)
-    // console.log("Image: ")
-    // console.log(image)
-    // try{
-    //     await prisma.post.create({
-    //         data: {
-    //             userId, title, content, image
-    //         }
-    //     });
-    //     toast.success("Post Created Successfully!")
-    //  }catch(error: any){
-    //      console.log("Create POst ERROR: " + error);
-    //  }
-    //  revalidatePath("/user/posts")
-    //  redirect("/user/posts")
+    // let cateValue = getFields(data.selected, "value");
+    // console.log("Value: ")
+    //  console.log(cateValue)
+// console.log("STart")
+//     cate.map((cat:any) => {
+//         console.log(cat);
+//     })
+
+
+console.log("End")
+    try{
+        await prisma.post.create({
+            data: {
+                userId:   data.userId,
+                title:    data.title,
+                content:  data.content,
+                image:    data.image,
+                categories: {
+                    create:
+                      cate.map((cat:any) => ({title: cat}))
+                }
+            }
+        });
+        console.log("POST created successfully!")
+       // toast.success("Post Created Successfully!")
+     }catch(error: any){
+         console.log("Create Post ERROR: " + error);
+      //   toast.error("The post was not created: " + error)
+     }
+     revalidatePath("/user/posts")
+     redirect("/user/posts")
 }

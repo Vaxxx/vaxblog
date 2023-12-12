@@ -16,31 +16,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {postSchema, PostSchemaType} from "@/lib/validation/post-validation";
 import {useSession} from "next-auth/react";
 import {MultiSelect} from "react-multi-select-component";
-
-
-const options:any = [];
-const populateCombo = () => {
-    try{
-
-        getAllCategories()
-            .then((category: any) => {
-                    category.map((val: any, i: number) => {
-                        // console.log("Val: ",val.id)
-                        options.push({"label" : val.title, "value": val.id })
-                    })
-                }
-            )
-
-    }catch(error: any){
-        console.log("Category UseEffect ERROR: " + error);
-    }
-}
+import {toast} from "react-toastify";
+import useMount from "@/hooks/useMount";
 
 
 const AddPostPage = () => {
     const {data: session} = useSession();
     // console.log(session?.user )
-     console.log("id:")
+     //console.log("id:")
      console.log(session?.user.id)
 
 
@@ -49,7 +32,31 @@ const AddPostPage = () => {
     const {handleSubmit, register, reset} = useForm();
 //  combo box details
     const [selected, setSelected] = useState([]);
+    const [catOptions, setCatOptions] = useState<any>();
+    //initialize mount
+    const mount = useMount();
 
+    //get categories
+    useEffect(() => {
+        (async() => {
+           const response = await fetch("/api/category",{
+               cache: "no-store"
+           });
+           let {categories} = await response.json();
+
+           let parsedCats = categories.map((cat:any) => {
+               return{
+                   value: cat.id,
+                   label: cat.title
+               }
+           })
+            setCatOptions(parsedCats);
+        })()
+    },[])
+
+
+
+    //default values for the form
     const form = useForm<PostSchemaType>({
         resolver: zodResolver(postSchema),
         defaultValues: {
@@ -57,59 +64,33 @@ const AddPostPage = () => {
             content: "",
              image: "",
              userId: "",
-            selected: ""
+            selected: {
+                label: "",
+                value: ""
+            }
         }
     })
 
 
     const PostSubmit = async(data: PostSchemaType) => {
         console.log("Good byeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-        data.image = imageUrl as string;
+         data.image = imageUrl as string;
         data.userId = session?.user.id as string;
-        data.selected = JSON.stringify(selected);
-          await CreatePost(data);
+        data.selected =  selected  as any;
+        if(data.image === '') {
+            toast.error("Please upload an image.")
+        }else if(Object.keys(data.selected).length === 0 ){
+                toast.error("Please select at least one category.")
+        }
+        else{
+            await CreatePost(data);
+            setTimeout(function(){
+                toast.success("Post added successfully!")
+            }, 2000);
+        }
     }
 
-
-    ///combo box features
-    //populate all categories into the combo box
-    /*
-    useEffect(() => {
-        console.log("got here")
-        try{
-            setIsLoading(true);
-            getAllCategories()
-                .then((category: any) => {
-                        console.log("Category details")
-                        console.log(category)
-                        // setValues(category)
-                    category.map((val: any, i: number) => {
-                        // console.log("Val: ",val)
-                        console.log("Val: ",val.id)
-                        // console.log("i: ",i)
-                        // console.log("underline")
-                        // console.log(i)
-                        // console.log("VAL[i].title", val[i].title);
-                        // console.log("VAL[i]", val[i]);
-
-
-                        options.push({"label" : val.title, "value": val.id })
-                    })
-                    }
-                   )
-
-         }catch(error: any){
-             console.log("Category UseEffect ERROR: " + error);
-         }finally {
-             setIsLoading(false);
-        }
-        console.log("Then ened")
-    },[]);
-  */
-
-    useEffect(() => {
-        populateCombo();
-    })
+ if(!mount) return null;
 
     return (
         <>
@@ -123,25 +104,19 @@ const AddPostPage = () => {
                     <CardContent>
 
                         <form onSubmit={form.handleSubmit((data) => PostSubmit(data))}>
+                           {/*title details*/}
                             <div className={"my-2"}>
                                 <Label htmlFor="title">Enter Title</Label>
                                 <Input {...form.register("title")} type="text" name={"title"} id={"title"} placeholder="Title..." />
                             </div>
 
-                            <div className={"my-3"}>
-                                <Label htmlFor={"Select"}>Select one or more Category
-                                </Label>
-                                {/*<pre>{JSON.stringify(selected)}</pre>*/}
-                                <MultiSelect className={"text-gray-700 hover:bg-gray-900"}
-                                   options={options}  value={selected}
-                                             labelledBy={"Select"} onChange={setSelected}/>
-                            </div>
-
-
+                            {/*Content details*/}
                             <div className={"my-4"}>
                                 <Label htmlFor="content">Enter Post Content</Label>
                                 <Textarea {...form.register("content")} id="content" placeholder={"Content...."} name={"content"}/>
                             </div>
+
+                            {/*Image details*/}
                             <div className="sm:col-span-2">
                                 <label htmlFor={"courseImage"}>
                                     Choose an  Image
@@ -156,7 +131,7 @@ const AddPostPage = () => {
                                     <Image src={imageUrl} alt={"Course Image"} width={"1000"} height={"667"}
                                            className={"w-full h-100 object-cover"}/>
                                 ): (
-                                    <UploadDropzone
+                                    <UploadButton
                                         endpoint="imageUploader"
                                         onClientUploadComplete={(res: any) => {
                                             // Do something with the response
@@ -170,8 +145,21 @@ const AddPostPage = () => {
                                         }}
                                     />
                                 )}
-
                             </div>
+
+                            {/*Categories details*/}
+                            <div className={"my-3"}>
+                                <Label htmlFor={"Select"}>Select one or more Category
+                                </Label>
+                                {/*<pre>{JSON.stringify(selected)}</pre>*/}
+                                {catOptions ?
+                                    <MultiSelect className={"text-gray-700 hover:bg-gray-900"}
+                                                 options={catOptions} value={selected}
+                                                 labelledBy={"Select"} onChange={setSelected}/>
+                                    : null}
+                            </div>
+
+                            {/*Submit details*/}
                             <div className={"my-3"}>
                                 <ProgressButton  props={"Save Category"}/>
                             </div>
