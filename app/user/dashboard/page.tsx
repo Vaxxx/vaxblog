@@ -3,7 +3,7 @@ import { DataTable } from '@/components/ui/data-table'
 
 async function getUsers(): Promise<User[]> {
     const res = await fetch(
-        'http://localhost:3000/api/register'
+        `${process.env.NEXTAUTH_URL}/api/register`
     )
     const data = await res.json()
     return data.users

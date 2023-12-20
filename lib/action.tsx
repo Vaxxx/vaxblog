@@ -125,7 +125,7 @@ export async function DeleteCategory(id: string){
 /////////////////////////GET ALL CATEGORY//////////////////////////////////////////////////////
 //get all categories
 export async function getAllCategories(){
-    const response = await fetch(`http://localhost:3000/api/category`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/category`, {
         cache: "no-store"
     });
     const data =  await response.json();
@@ -223,7 +223,7 @@ export async function DeletePost(id:string){
 
 //get user details based on the post(user id)
 export  async function getUserDetails(userId: string){
-    const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${userId}`, {
         cache: "no-store"
     });
     const data = await response.json();
@@ -232,7 +232,7 @@ export  async function getUserDetails(userId: string){
 
 //get posts based on the id
 export async function getPost(id: string){
-    const response = await fetch(`http://localhost:3000/api/post/posts/${id}`,{
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/post/posts/${id}`,{
         cache: "no-store"
     });
     const data = await response.json();

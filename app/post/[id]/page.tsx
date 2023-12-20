@@ -5,9 +5,9 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {getAllCommentsByPost, getPost, getUserDetails, postCommentsCount} from "@/lib/action";
 import CommentCard from "@/app/ui/CommentCard";
 import {getServerSession} from "next-auth";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {authOptions} from "@/auth";
 
 const SinglePostPage = async ({params} : {params: {id: string}}) => {
     const id = params.id;

@@ -9,7 +9,7 @@ import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 
 async function getPostsByUser(userId: string): Promise<Post[]>{
     ///no-store ---> means no caching at all
-    const res = await fetch(`http://localhost:3000/api/post/${userId}`,
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/post/${userId}`,
         {cache: "no-store"}
     )
     const data =  await res.json();

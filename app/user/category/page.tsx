@@ -24,7 +24,7 @@ import LoadingButton from "@/components/ui/loading-button";
 
 async function getCategories(): Promise<Category[]>{
     ///no-store ---> means no caching at all
-    const res = await fetch("http://localhost:3000/api/category/desc",
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/category/desc`,
         {cache: "no-store"}
         )
     const data =  await res.json();
