@@ -5,7 +5,7 @@ import {MdAddCircle} from "react-icons/md";
 import {PostTable} from "@/components/ui/post-table";
 import {Post, columns } from "./columns";
 import {getServerSession} from "next-auth";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import {authOptions} from "@/auth";
 
 async function getPostsByUser(userId: string): Promise<Post[]>{
     ///no-store ---> means no caching at all
