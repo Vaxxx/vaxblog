@@ -25,7 +25,7 @@ const PostCard = ({post}: PostProps) => {
                        </p>
                        <Button
                           className={buttonVariants({
-                              variant: "outline", className: "navLink float-right mb-2 rounded-lg", size: "lg"
+                              variant: "outline", className: "navLink float-right mb-2 rounded-lg bg-gray-700 text-white hover:bg-gray-900", size: "lg"
                           })}
                        >Read More</Button>
                    </div>

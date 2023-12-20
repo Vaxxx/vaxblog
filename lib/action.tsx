@@ -231,7 +231,7 @@ export  async function getUserDetails(userId: string){
 }
 
 //get posts based on the id
-export async function getPost(id: string){
+export async function getPostById(id: string){
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/post/posts/${id}`,{
         cache: "no-store"
     });
@@ -245,6 +245,19 @@ export async function getAllPaginatedPosts(page: number, limit: number, pageSize
             orderBy: {createdAt: "desc"},
             skip: (Number(page) - 1) * limit,
             take: pageSize,
+            include: {
+                categories: true
+            }
+        })
+    }catch(error: any){
+        console.log(" Get all Paginated Post ERROR: " + error);
+    }
+}
+
+export async function getAllPosts(){
+    try{
+        return await prisma.post.findMany({
+            orderBy: {createdAt: "desc"},
             include: {
                 categories: true
             }

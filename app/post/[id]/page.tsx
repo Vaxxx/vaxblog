@@ -2,7 +2,7 @@ import React from 'react';
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import Image from "next/image";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {getAllCommentsByPost, getPost, getUserDetails, postCommentsCount} from "@/lib/action";
+import {getAllCommentsByPost, getPostById, getUserDetails, postCommentsCount} from "@/lib/action";
 import CommentCard from "@/app/ui/CommentCard";
 import {getServerSession} from "next-auth";
 import {Button} from "@/components/ui/button";
@@ -13,7 +13,7 @@ const SinglePostPage = async ({params} : {params: {id: string}}) => {
     const id = params.id;
    // console.log("USERID: ", id);
     // console.log("USER: ", user)
-    const post = await getPost(id);
+    const post = await getPostById(id);
     // console.log("Post page id: ")
     // console.log(post.userId)
     //  console.log(post)

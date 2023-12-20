@@ -1,5 +1,4 @@
 import PostCard from "@/app/ui/PostCard";
-import prisma from "@/lib/prisma";
 import Image from "next/image";
 import {buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
@@ -56,34 +55,34 @@ export default async function Home({searchParams}: {searchParams: {[key:string]:
                         </div>
                     </div>
                     <div className="col-span-1">
-                        {/*column of advert*/}
-                        {/*<div className="grid grid-row-1 gap-3 mt-5">*/}
-                        {/*    <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>*/}
-                        {/*    <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>*/}
-                        {/*    <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>*/}
-                        {/*</div>*/}
-                        {/*latest posts*/}
-                        {/*<div className={"mt-2 py-2"}>*/}
-                        {/*    <h2 className={"text-lg antialiased text-center underline"}>Latest Posts</h2>*/}
-                        {/*    <ul className={"space-y-4"}>*/}
-                        {/*        <li>This is post 1</li>*/}
-                        {/*        <li>This is post 2</li>*/}
-                        {/*        <li>This is post 3</li>*/}
-                        {/*        <li>This is post 4</li>*/}
-                        {/*        <li>This is post 5</li>*/}
-                        {/*    </ul>*/}
-                        {/*</div>*/}
-                        {/*latest users*/}
-                        {/*<div className={"mt-2 py-2"}>*/}
-                        {/*    <h2 className={"text-lg antialiased text-center underline"}>Latest Users</h2>*/}
-                        {/*    <ul className={"space-y-4"}>*/}
-                        {/*        <li>This is User 1</li>*/}
-                        {/*        <li>This is User 2</li>*/}
-                        {/*        <li>This is User 3</li>*/}
-                        {/*        <li>This is User 4</li>*/}
-                        {/*        <li>This is User 5</li>*/}
-                        {/*    </ul>*/}
-                        {/*</div>*/}
+                        column of advert
+                        <div className="grid grid-row-1 gap-3 mt-5">
+                            <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
+                            <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
+                            <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
+                        </div>
+                        latest posts
+                        <div className={"mt-2 py-2"}>
+                            <h2 className={"text-lg antialiased text-center underline"}>Latest Posts</h2>
+                            <ul className={"space-y-4"}>
+                                <li>This is post 1</li>
+                                <li>This is post 2</li>
+                                <li>This is post 3</li>
+                                <li>This is post 4</li>
+                                <li>This is post 5</li>
+                            </ul>
+                        </div>
+                        latest users
+                        <div className={"mt-2 py-2"}>
+                            <h2 className={"text-lg antialiased text-center underline"}>Latest Users</h2>
+                            <ul className={"space-y-4"}>
+                                <li>This is User 1</li>
+                                <li>This is User 2</li>
+                                <li>This is User 3</li>
+                                <li>This is User 4</li>
+                                <li>This is User 5</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
