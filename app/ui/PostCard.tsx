@@ -23,34 +23,13 @@ const PostCard = ({post}: PostProps) => {
 
                            {post.content.length < 300 ?  post.content : post.content.slice(0,300) + " ..."}
                        </p>
-                       <Link href={`/post/${post.id}`}
+                       <Button
                           className={buttonVariants({
                               variant: "outline", className: "navLink float-right mb-2 rounded-lg", size: "lg"
                           })}
-                       >Read More</Link>
+                       >Read More</Button>
                    </div>
-                   {/*<div className={"flex justify-between flex-row px-6"}>*/}
-                   {/*    <Button variant={"secondary"} className={"text-sm"}>Read More<RiMoreFill size={15}/></Button>*/}
-                   {/*    <Avatar className={"bg-none"}>*/}
-                   {/*        <AvatarImage src="/images/placeholder.jpg" />*/}
-                   {/*        <AvatarFallback>CN</AvatarFallback>*/}
-                   {/*    </Avatar>*/}
-                   {/*</div>*/}
-                   {/*<div className="px-6 py-4">*/}
-                   {/*    {post?.categories! === '' ?*/}
-                   {/*        <span*/}
-                   {/*            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#photography</span>*/}
 
-                   {/*        :*/}
-                   {/*        <span*/}
-                   {/*            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#photography</span>*/}
-
-                   {/*    }*/}
-                   {/*     <span*/}
-                   {/*        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#travel</span>*/}
-                   {/*    <span*/}
-                   {/*        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#winter</span>*/}
-                   {/*</div>*/}
                </div>
            </Link>
         </>

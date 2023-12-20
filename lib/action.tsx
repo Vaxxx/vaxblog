@@ -239,7 +239,20 @@ export async function getPost(id: string){
     return data.post;
 }
 
-
+export async function getAllPaginatedPosts(page: number, limit: number, pageSize: number){
+    try{
+        return await prisma.post.findMany({
+            orderBy: {createdAt: "desc"},
+            skip: (Number(page) - 1) * limit,
+            take: pageSize,
+            include: {
+                categories: true
+            }
+        })
+    }catch(error: any){
+        console.log(" Get all Paginated Post ERROR: " + error);
+    }
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +307,8 @@ export async function CreateComment(formData: FormData){
          revalidatePath(`/post/${postId}`)
          redirect(`/post/${postId}`)
     }
+
+
 
 //////////////////////////////////display comments of a post////////////////////////
 export async function getAllCommentsByPost(id: string){
