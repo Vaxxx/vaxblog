@@ -1,12 +1,14 @@
+"use client";
 import React from 'react';
 import {AiFillDashboard} from "react-icons/ai";
 import {MdCategory, MdLogout} from "react-icons/md";
 import {BsFilePost} from "react-icons/bs";
 import Image from "next/image";
 import Link from "next/link";
+import {signOut, useSession} from "next-auth/react";
 
 
-const menuItems = [
+export const menuItems = [
     {
         title: "Dashboard",
         path:  "/user/dashboard",
@@ -24,15 +26,16 @@ const menuItems = [
     }
 ]
 const UserSidebar = () => {
+    const session = useSession();
+    console.log("SESSSION:")
+    console.log(session.data?.user.image)
     return (
-        <>
-
-           <div className={"sticky top-[40px]"}>
+           <div className={"top-[40px] h-screen"}>
                <div className={"flex items-center flex-col gap-2"}>
-                   <Image className={"rounded-2xl object-cover w-full"} src={"/images/placeholder.jpg"}
+                   <Image className={"rounded-2xl object-cover w-full"} src={session?.data?.user?.image === null ? "/images/placeholder.jpg": session.data?.user.image!}
                           alt={"user"} width={"100"} height={"50"}/>
-                       <span className={"font-bold text-lg text-slate-500"}>Simon Cowell</span>
-                       <span className={"text-sm text-slate-500"}>simon@mail.com</span>
+                       <span className={"font-bold text-lg text-slate-500"}>{session?.data?.user?.name}</span>
+                       <span className={"text-sm text-slate-500"}>{session?.data?.user?.email}</span>
 
                </div>
                <ul className={"text-slate-700 my-2"}>
@@ -43,11 +46,11 @@ const UserSidebar = () => {
                        </Link>
                    ))}
                </ul>
-               <button className={"btn bg-red-600 hover:bg-red-400 p-2 mt-10 cursor-pointer rounded-lg w-full"}>
+               <button onClick={()=>signOut()}
+                   className={"btn bg-red-600 hover:bg-red-400 p-2 mt-10 cursor-pointer rounded-lg w-full bottom-0"}>
                    <MdLogout size={20}/>Logout
                </button>
            </div>
-        </>
     );
 };
 

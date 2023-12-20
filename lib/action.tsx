@@ -4,8 +4,7 @@ import prisma from "@/lib/prisma";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {toast} from "react-toastify";
-import {PostSchemaType} from "@/lib/validation/post-validation";
-import {Category} from "@/lib/types";
+import {PostSchemaType, PostUpdateSchemaType} from "@/lib/validation/post-validation";
 
 const CategoryFormSchema = z.object({
     id: z.string(),
@@ -186,4 +185,140 @@ console.log("End")
      }
      revalidatePath("/user/posts")
      redirect("/user/posts")
+}
+
+//////////////////////////////////UPDATE POST////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+export async function UpdatePost(id:string, data: PostUpdateSchemaType) {
+     console.log(data);
+}
+
+export async function DeletePost(id:string){
+    const confirmed = confirm("Are you sure you want to delete this post?")
+    if(confirmed){
+         try{
+            await prisma.post.delete({where: {id}});
+             revalidatePath("/user/posts");
+             redirect("/user/posts");
+          }catch(error: any){
+              console.log("ERROR: " + error);
+          }
+
+    }
+}
+
+//////////////////////////////////////////GET POST BY ID//////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+// export async function GetPostById(id: string){
+//     const post:PostSchemaType = await prisma.post.findUnique({
+//         where: {
+//             id
+//         }
+//     })
+//     console.log("POst is: ")
+//     console.log(post);
+// }
+
+
+
+//get user details based on the post(user id)
+export  async function getUserDetails(userId: string){
+    const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
+        cache: "no-store"
+    });
+    const data = await response.json();
+    return data.user;
+}
+
+//get posts based on the id
+export async function getPost(id: string){
+    const response = await fetch(`http://localhost:3000/api/post/posts/${id}`,{
+        cache: "no-store"
+    });
+    const data = await response.json();
+    return data.post;
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////COMMENT SECTION////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+const CommentFormSchema = z.object({
+    id: z.string(),
+    userId: z.string(),
+    postId: z.string(),
+    comment: z.string().min(3, "Your comment must be up to three characters")
+});
+const CreateCommentType = CommentFormSchema.omit({id: true});
+//////////////////////////////////Add Comment
+export async function CreateComment(formData: FormData){
+    console.log("Create Comment")
+    console.log(formData);
+
+    const validatedFields = CreateCommentType.safeParse({
+        userId:  formData.get("userId"),
+        postId:  formData.get("postId"),
+        comment: formData.get("comment")
+    });
+
+    // console.log("VALIDATED FIELDS: ")
+    // console.log(validatedFields)
+
+
+    //if validation fails
+    if(!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: "Missing Fields. Failed to create a comment."
+        }
+    }
+
+        const {userId, postId, comment} = validatedFields.data
+
+        //insert into database
+        try{
+           await prisma.comment.create({
+               data: {
+                   userId: userId,
+                   postId: postId,
+                   comment: comment
+               }
+           });
+          // toast.success("Comment added successfully!")
+         }catch(error: any){
+             console.log("Create Connect ERROR: " + error);
+         }
+         revalidatePath(`/post/${postId}`)
+         redirect(`/post/${postId}`)
+    }
+
+//////////////////////////////////display comments of a post////////////////////////
+export async function getAllCommentsByPost(id: string){
+    try{
+        return await prisma.comment.findMany({
+            where: {
+                postId: id
+            }
+        });
+
+     }catch(error: any){
+         console.log("Get All Comments ERROR: " + error);
+     }
+}
+
+
+//get count of comments in a post///////////////////////////////////////////////////
+export async function postCommentsCount(id: string){
+    try{
+        return await prisma.comment.count({
+            where: {
+                postId: id
+            }
+        })
+     }catch(error: any){
+         console.log("GET AlL comments count ERROR: " + error);
+     }
 }

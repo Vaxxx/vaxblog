@@ -5,9 +5,10 @@ export type Category = {
 }
 
 export type Post = {
-    id: string;
-    userId: string;
-    title: string;
-    content: string;
-    image:string;
+    id:          string;
+    userId:      string;
+    title:       string;
+    content:     string;
+    image:       string;
+    category:    Category[];
 }

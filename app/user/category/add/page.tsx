@@ -6,8 +6,6 @@ import {CreateCategory} from "@/lib/action";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
-import {Button} from "@/components/ui/button";
-import {MdDataSaverOn} from "react-icons/md";
 import ProgressButton from "@/components/ui/progress-button";
 const AddCategoryPage = () => {
 

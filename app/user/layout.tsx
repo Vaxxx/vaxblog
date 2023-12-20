@@ -6,7 +6,7 @@ const UserLayout = ({children}:any) => {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={"p-10 h-screen bg-gray-300"}>
+                <div className={"hidden  md:block p-10 h-screen bg-gray-300"}>
                     <UserSidebar/>
                 </div>
                 <div className={"col-span-2 p-20"}>

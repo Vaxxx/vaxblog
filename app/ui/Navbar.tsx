@@ -75,9 +75,9 @@ const Navbar = () => {
                                                 </PopoverTrigger>
                                                 <PopoverContent className={"w-100"}>
                                                     <div className={"grid gap-4"}>
-                                                        <Link href="/login" className="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                                                        <Link href="/login" className="block px-4 py-2 text-sm text-gray-300 hover:underline " role="menuitem"
                                                               tabIndex={-1} id="user-menu-item-1">Sign In</Link>
-                                                        <Link href="/register" className="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                                                        <Link href="/register" className="block px-4 py-2 text-sm text-gray-300 hover:underline"   role="menuitem"
                                                               tabIndex={-1} id="user-menu-item-2">Sign Up</Link>
                                                     </div>
                                                 </PopoverContent>

@@ -45,6 +45,8 @@ const LoginPage = () => {
                    console.log("Something is wrong: " + callback.error);
                    toast.error("Something went wrong! " + callback.error);
                }else if(callback?.ok && !callback?.error){
+
+                   router.refresh();
                    toast.success("Login is Successful!");
                    router.push("/user/dashboard");
                }
