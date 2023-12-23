@@ -4,21 +4,21 @@ import Image from "next/image";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {getAllCommentsByPost, getPostById, getUserDetails, postCommentsCount} from "@/lib/action";
 import CommentCard from "@/app/ui/CommentCard";
-import {getServerSession} from "next-auth";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import {authOptions} from "@/auth";
+import {auth} from "@/auth";
 
 const SinglePostPage = async ({params} : {params: {id: string}}) => {
     const id = params.id;
    // console.log("USERID: ", id);
     // console.log("USER: ", user)
     const post = await getPostById(id);
-    // console.log("Post page id: ")
-    // console.log(post.userId)
-    //  console.log(post)
+     console.log("Post page id: ")
+    console.log(post.userId)
+      console.log(post)
   const userDetails = await getUserDetails(post.userId);
-//     console.log(userDetails)
+     console.log("user details")
+     console.log(userDetails)
 //    console.log("Inside our shop")
    // console.log(getUserDetails("clp9gme5b0000w1shdupe2ep3"))
 
@@ -30,7 +30,7 @@ const SinglePostPage = async ({params} : {params: {id: string}}) => {
     const commentCount = await  postCommentsCount(id);
 
     //get current user status
-    const currentUser = await getServerSession(authOptions);
+    const currentUser = await auth()
     console.log("current user")
     console.log(currentUser)
     console.log("current user ID")
@@ -59,7 +59,7 @@ const SinglePostPage = async ({params} : {params: {id: string}}) => {
                             </p>
                             <p className={"block"}></p>
                             <p className={"float-right"}>
-                                {userDetails.image !== "" ?
+                                {userDetails !== null ?
                                     <div className={"grid grid-cols-2 float-right"}>
                                         <div>
                                             <Image src={userDetails.image} alt="User" width="50" height="50" className="rounded-full" />
@@ -78,13 +78,13 @@ const SinglePostPage = async ({params} : {params: {id: string}}) => {
                                         <div>
                                             <Image src={"/images/placeholder.jpg"} alt="User" width="50" height="50" className="rounded-full" />
                                         </div>
-                                        <div>
-                                            <div className={"grid grid-rows-3 gap-2"}>
-                                                <div><h2 className={"text-sm block"}>Written by: </h2></div>
-                                                <div><p className={"text-xs"}>{new Date(userDetails.updatedAt).toISOString().substring(0,10)}</p></div>
-                                                <div><h2 className={"text-lg"}>{userDetails.name}</h2></div>
-                                            </div>
-                                        </div>
+                                        {/*<div>*/}
+                                        {/*    <div className={"grid grid-rows-3 gap-2"}>*/}
+                                        {/*        <div><h2 className={"text-sm block"}>Written by: </h2></div>*/}
+                                        {/*        <div><p className={"text-xs"}>{new Date(userDetails.updatedAt).toISOString().substring(0,10)}</p></div>*/}
+                                        {/*        <div><h2 className={"text-lg"}>{userDetails.name}</h2></div>*/}
+                                        {/*    </div>*/}
+                                        {/*</div>*/}
                                     </div>
 
                                    }
@@ -95,12 +95,12 @@ const SinglePostPage = async ({params} : {params: {id: string}}) => {
                         </CardContent>
                         <hr className={"text-white h-3"}/>
                         <CardFooter className={"my-4 mt-5 grid grid-rows-4 gap-3"}>
-                            {
-                                currentUser?.user.id !== undefined ?
-                                    <CommentCard post={post} userId={currentUser?.user?.id as string} commentLength={Number(commentCount)}/>
-                                    :
-                                    <Link href={"/login"}> <Button type={"button"}>You must be signed in to drop a comment.  <span> Click to Login</span></Button></Link>
-                            }
+                            {/*{*/}
+                            {/*    currentUser?.user.id !== undefined ?*/}
+                            {/*        <CommentCard post={post} userId={currentUser?.user?.id as string} commentLength={Number(commentCount)}/>*/}
+                            {/*        :*/}
+                            {/*        <Link href={"/login"}> <Button type={"button"}>You must be signed in to drop a comment.  <span> Click to Login</span></Button></Link>*/}
+                            {/*}*/}
 
                         </CardFooter>
                     </Card>

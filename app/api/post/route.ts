@@ -1,4 +1,4 @@
-//display all posts
+//display all contact
 import prisma from "@/lib/prisma";
 import {NextResponse} from "next/server";
 

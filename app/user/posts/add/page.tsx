@@ -73,7 +73,6 @@ const AddPostPage = () => {
 
 
     const PostSubmit = async(data: PostSchemaType) => {
-        console.log("Good byeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
          data.image = imageUrl as string;
         data.userId = session?.user.id as string;
         data.selected =  selected  as any;
@@ -98,7 +97,7 @@ const AddPostPage = () => {
                 <CardHeader>
                     <CardTitle className={"flex justify-between"}>
                         <h2>Add a Post</h2>
-                        <Link href={"/user/posts/"} className={"btn inline-flex px-2 text-sm rounded-lg bg-gray-100 text-gray-900 hover:bg-gray-900 hover:text-gray-100"}>
+                        <Link href={"/user/posts"} className={"btn inline-flex px-2 text-sm rounded-lg bg-gray-100 text-gray-900 hover:bg-gray-900 hover:text-gray-100"}>
                             <IoArrowBackCircleOutline size={20} className={"space-x-2"}/>Posts</Link>
                     </CardTitle>
                     <CardContent>

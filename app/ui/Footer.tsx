@@ -9,6 +9,8 @@ import {GrLogin} from "react-icons/gr";
 import SocialNetwork from "@/app/ui/social-network";
 
 const Footer = () => {
+     const today = new Date();
+     const year = today.getFullYear();
     return (
         <>
             <div className="bg-gray-800 text-white">
@@ -17,7 +19,7 @@ const Footer = () => {
                     <div className="grid md:grid-cols-3 gap-3">
                         <aside >
                             <Image src={"/whiteLogo.svg"} alt={"CSI"} width={"50"} height={"50"} className={"fill-current place-items-center align-center"}/>
-                            <h2 className={"text-2xl underline transition duration-500 ease-in-out text-gray-100 hover:text-gray-200 transform hover:-translate-y-1 hover:scale-110"}>Vax Blog</h2>
+                            <h2 className={"text-2xl underline transition duration-500 ease-in-out text-gray-100 hover:text-gray-200 transform hover:-translate-y-1 hover:scale-110"}>Code Blog</h2>
                             <p>We provide latest information trending in the Information Technology sphere.</p>
                             <p>Always stay in touch to get all the juicy IT gist.</p>
                         </aside>
@@ -56,7 +58,7 @@ const Footer = () => {
                     </nav>
                     </div>
                 </footer>
-                <h2 className={"text-center text-sm text-bold mt-1 pb-1"}>Copyright © 2023 - All right reserved</h2>
+                <h2 className={"text-center text-sm text-bold mt-1 pb-1"}>Copyright © {year} All right reserved</h2>
             </div>
         </>
     );

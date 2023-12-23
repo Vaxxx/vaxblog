@@ -40,7 +40,7 @@ const Navbar = () => {
                                     <Image className="h-8 w-auto"
                                            src="/whiteLogo.svg" width={"60"} height={"60"}
                                            alt="CSI"/>
-                                    <span className={"pl-1 transition duration-500 ease-in-out text-gray-100 hover:text-gray-200 transform hover:-translate-y-1 hover:scale-110"}>VAX Blog</span>
+                                    <span className={"pl-1 transition duration-500 ease-in-out text-gray-100 hover:text-gray-200 transform hover:-translate-y-1 hover:scale-110"}>Code Blog</span>
                                 </Link>
                             </div>
                             <div className="hidden sm:ml-6 sm:block">
@@ -49,10 +49,8 @@ const Navbar = () => {
 
                                     <Link href="/about"
                                           className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">About</Link>
-                                    <Link href="/posts"
-                                          className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Posts</Link>
-                                    <Link href="/category"
-                                          className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Category</Link>
+                                    <Link href="/contact"
+                                          className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Contact Us</Link>
                                 </div>
                             </div>
                         </div>
@@ -75,9 +73,9 @@ const Navbar = () => {
                                                 </PopoverTrigger>
                                                 <PopoverContent className={"w-100"}>
                                                     <div className={"grid gap-4"}>
-                                                        <Link href="/login" className="block px-4 py-2 text-sm text-gray-300 hover:underline " role="menuitem"
+                                                        <Link href="/login" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:underline " role="menuitem"
                                                               tabIndex={-1} id="user-menu-item-1">Sign In</Link>
-                                                        <Link href="/register" className="block px-4 py-2 text-sm text-gray-300 hover:underline"   role="menuitem"
+                                                        <Link href="/register" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:underline"   role="menuitem"
                                                               tabIndex={-1} id="user-menu-item-2">Sign Up</Link>
                                                     </div>
                                                 </PopoverContent>
@@ -128,10 +126,8 @@ const Navbar = () => {
 
                         <Link href="/about"
                               className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">About</Link>
-                        <Link href="/posts"
-                              className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Posts</Link>
-                        <a href="/category"
-                           className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Category</a>
+                        <Link href="/contact"
+                              className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Contact Us</Link>
                     </div>
                 </div>
             </nav>

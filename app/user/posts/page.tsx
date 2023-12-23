@@ -4,8 +4,7 @@ import Link from "next/link";
 import {MdAddCircle} from "react-icons/md";
 import {PostTable} from "@/components/ui/post-table";
 import {Post, columns } from "./columns";
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/auth";
+import {auth} from "@/auth";
 
 async function getPostsByUser(userId: string): Promise<Post[]>{
     ///no-store ---> means no caching at all
@@ -17,7 +16,7 @@ async function getPostsByUser(userId: string): Promise<Post[]>{
 }
 
 const PostsPage = async() => {
-     const userDetails = await getServerSession(authOptions);
+     const userDetails = await  auth();
      console.log(userDetails?.user.id)
 
     console.log("POST PAGE.....")

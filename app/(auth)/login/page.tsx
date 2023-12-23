@@ -12,6 +12,8 @@ import LoadingButton from "@/components/ui/loading-button";
 import Link from "next/link";
 import {signIn, useSession} from "next-auth/react";
 import {toast} from "react-toastify";
+import {FcGoogle} from "react-icons/fc";
+import {FaGithub} from "react-icons/fa6";
 
 const LoginPage = () => {
 
@@ -93,8 +95,16 @@ const LoginPage = () => {
                             </form>
                         </Form>
                     </CardContent>
-                    <CardFooter className="flex justify-end hover:underline">
-                        <Link href={"/register"}>Don't have an account? Sign Up here</Link>
+                    <CardFooter className="grid grid-rows-2 place-items-center ">
+                        <Button onClick={() => signIn("google", {callbackUrl: "/user/dashboard"}) }
+                                className={"gap-2 bg-white text-gray-800 hover:text-gray-100 hover:bg-red-700 my-2 border border:bg-red-700"}>
+                            <FcGoogle size={25}/> Sign In With Google
+                        </Button>
+                        {/*<Button onClick={() => signIn("github", {callbackUrl: "/user/dashboard"}) }*/}
+                        {/*        className={"bg-slate-800 dark:bg-slate-600 dark:text-gray-900 hover:bg-slate-950 dark:hover:bg-slate-700 gap-2 my-2"}>*/}
+                        {/*    <FaGithub size={25}/> Sign In With Github*/}
+                        {/*</Button>*/}
+                        <Link href={"/register"} className={"hover:underline dark:hover:no-underline hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded"}>Don't have an account? Sign Up here</Link>
                     </CardFooter>
                 </Card>
             </div>

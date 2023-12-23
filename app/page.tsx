@@ -3,7 +3,7 @@ import Image from "next/image";
 import {buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
 import {BiSolidSkipNextCircle, BiSolidSkipPreviousCircle} from "react-icons/bi";
-import {getAllPaginatedPosts} from "@/lib/action";
+import {getAllPaginatedPosts, getlastCategories, getlastPosts} from "@/lib/action";
 
 export default async function Home({searchParams}: {searchParams: {[key:string]:string | string[] | undefined}}) {
     ///pagination
@@ -13,22 +13,24 @@ export default async function Home({searchParams}: {searchParams: {[key:string]:
     const limit = typeof searchParams.limit === 'string' ? Number(searchParams.limit) : 2;
 
     const posts = await getAllPaginatedPosts(page, limit, pageSize)
-
-
+    //get the last five contact
+    const lastPosts = await getlastPosts();
+    //get the last five categories
+    const lastCategories = await getlastCategories();
     return (
         <>
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-3">
                     <div className="col-span-2">
                         {
-                            posts?.map((post) => (
+                            posts?.map((post: any) => (
                                 <PostCard key={post.id} post={post}/>
                             ))
                         }
                         {
                             posts?.length === 0 && (
                                 <div className={"col-span-full text-center text-3xl"}>
-                                    {"There is currently no posts available."}
+                                    {"There is currently no contact available."}
                                 </div>
                             )
                         }
@@ -55,32 +57,36 @@ export default async function Home({searchParams}: {searchParams: {[key:string]:
                         </div>
                     </div>
                     <div className="col-span-1">
-                        column of advert
+                        <h2 className={"text-bold space-y-2 text-center text-lg"}> Advertise here </h2>
                         <div className="grid grid-row-1 gap-3 mt-5">
-                            <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
-                            <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
+                            <div><Image src={"/images/computer-woman.jpg"} alt={"advert"} width={400} height={200}/></div>
+                            <div><Image src={"/images/3.jpg"} alt={"advert"} width={400} height={200}/></div>
                             <div><Image src={"/images/blank.jpg"} alt={"advert"} width={400} height={200}/></div>
                         </div>
-                        latest posts
+                        {/*latest contact*/}
                         <div className={"mt-2 py-2"}>
-                            <h2 className={"text-lg antialiased text-center underline"}>Latest Posts</h2>
+                            <h2 className={"text-lg antialiased text-center "}>Latest Posts</h2>
                             <ul className={"space-y-4"}>
-                                <li>This is post 1</li>
-                                <li>This is post 2</li>
-                                <li>This is post 3</li>
-                                <li>This is post 4</li>
-                                <li>This is post 5</li>
+                                {
+                                    lastPosts?.map((post) => {
+                                        return(
+                                            <li key={post.id}>{post.title}</li>
+                                        )
+                                    })
+                                }
                             </ul>
                         </div>
-                        latest users
+                        {/*latest users*/}
                         <div className={"mt-2 py-2"}>
-                            <h2 className={"text-lg antialiased text-center underline"}>Latest Users</h2>
+                            <h2 className={"text-lg antialiased text-center"}>Latest Categories</h2>
                             <ul className={"space-y-4"}>
-                                <li>This is User 1</li>
-                                <li>This is User 2</li>
-                                <li>This is User 3</li>
-                                <li>This is User 4</li>
-                                <li>This is User 5</li>
+                                {
+                                    lastCategories?.map((category) => {
+                                        return(
+                                            <li key={category.id}>{category.title}</li>
+                                        )
+                                    })
+                                }
                             </ul>
                         </div>
                     </div>

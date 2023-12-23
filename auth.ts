@@ -4,6 +4,12 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
+import {
+    GetServerSidePropsContext,
+    NextApiRequest,
+    NextApiResponse,
+} from "next";
 
 
 declare module "next-auth" {
@@ -23,12 +29,16 @@ declare module "next-auth/jwt" {
 }
 
 
-export const authOptions:NextAuthOptions = {
+export const config = {
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_SECRET_ID as string
+        }),
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID as string,
+            clientSecret: process.env.GITHUB_SECRET_ID as string
         }),
         CredentialsProvider({
             name: 'Credentials',
@@ -82,6 +92,17 @@ export const authOptions:NextAuthOptions = {
             return {...token, ...user};
         }
     }
-};
+} satisfies NextAuthOptions;
 
-export const getAuthSession = () => getServerSession(authOptions);
+// export const getAuthSession = () => getServerSession(authOptions);
+export default NextAuth(config);
+
+// Use it in server contexts
+export function auth(
+    ...args:
+        | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+        | [NextApiRequest, NextApiResponse]
+        | []
+) {
+    return getServerSession(...args, config);
+}

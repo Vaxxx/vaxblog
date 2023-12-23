@@ -3,7 +3,7 @@ import {z} from "zod";
 import prisma from "@/lib/prisma";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
-import {toast} from "react-toastify";
+// import {toast} from "react-toastify";
 import {PostSchemaType, PostUpdateSchemaType} from "@/lib/validation/post-validation";
 
 const CategoryFormSchema = z.object({
@@ -54,7 +54,7 @@ export async function CreateCategory(formData: FormData ){
                 description:  description
             }
         });
-        toast.success("Category Created Successfully!")
+       // toast.success("Category Created Successfully!")
      }catch(error: any){
          console.log("Create Category (ACTION) ERROR: " + error);
 
@@ -94,7 +94,7 @@ export async function UpdateCategory(id: string, formData: FormData){
                title, description
            }
        });
-        toast.success("Category Updated Successfully!")
+        // toast.success("Category Updated Successfully!")
      }catch(error: any){
          console.log("Update Category ERROR: " + error);
          // return{message: "DATABASE ERROR: failed to update Category."}
@@ -114,7 +114,7 @@ export async function DeleteCategory(id: string){
         try{
            await prisma.category.delete({where: {id}});
            revalidatePath("/user/category")
-           toast.success("Category deleted successfully!");
+           // toast.success("Category deleted successfully!");
 
      }catch(error: any){
          console.log("ERROR: " + error);
@@ -131,6 +131,17 @@ export async function getAllCategories(){
     const data =  await response.json();
     return data.categories;
 
+}
+
+
+export async function getlastCategories(){
+    try{
+        return await prisma.category.findMany({
+            take: 5
+        })
+    }catch(error: any){
+        console.log(" Get all last Category ERROR: " + error);
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////// POSTS/////////////////////////////////////////////////////////
@@ -183,7 +194,7 @@ console.log("End")
          console.log("Create Post ERROR: " + error);
       //   toast.error("The post was not created: " + error)
      }
-     revalidatePath("/user/posts")
+     revalidatePath("/user/contact")
      redirect("/user/posts")
 }
 
@@ -198,7 +209,7 @@ export async function DeletePost(id:string){
     if(confirmed){
          try{
             await prisma.post.delete({where: {id}});
-             revalidatePath("/user/posts");
+             revalidatePath("/user/contact");
              redirect("/user/posts");
           }catch(error: any){
               console.log("ERROR: " + error);
@@ -227,10 +238,15 @@ export  async function getUserDetails(userId: string){
         cache: "no-store"
     });
     const data = await response.json();
+    console.log("daata");
+    // if(data.user === null){
+    //     revalidatePath("/")
+    //     redirect("/")
+    // }
     return data.user;
 }
 
-//get posts based on the id
+//get contact based on the id
 export async function getPostById(id: string){
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/post/posts/${id}`,{
         cache: "no-store"
@@ -264,6 +280,17 @@ export async function getAllPosts(){
         })
     }catch(error: any){
         console.log(" Get all Paginated Post ERROR: " + error);
+    }
+}
+//get the five last contact
+export async function getlastPosts(){
+    try{
+        return await prisma.post.findMany({
+            take: 5,
+            orderBy: {createdAt: "desc"},
+        })
+    }catch(error: any){
+        console.log(" Get all last Post ERROR: " + error);
     }
 }
 

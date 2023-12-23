@@ -11,7 +11,7 @@ import {Providers} from "@/app/provider";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'VAX Blog',
+  title: 'Code Blog',
   description: 'A podium for all IT Trends',
 }
 
@@ -32,7 +32,7 @@ export default function RootLayout({
              >
                  <Navbar/>
                  {children}
-                 <ToastContainer position={"top-right"} theme={"light"} autoClose={4000} />
+                 <ToastContainer position={"bottom-right"} theme={"light"} autoClose={4000} />
                  <Footer/>
              </ThemeProvider>
          </Providers>
